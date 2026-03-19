@@ -1,0 +1,254 @@
+[
+    {
+        "id": "nike-alphafly-3",
+        "name": "Nike Alphafly 3",
+        "weight": "218g",
+        "material": "ZoomX / Atomknit",
+        "drop": "8mm",
+        "plate": "Full Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "nike-vaporfly-3",
+        "name": "Nike Vaporfly 3",
+        "weight": "185g",
+        "material": "ZoomX Foam",
+        "drop": "8mm",
+        "plate": "Full Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "adidas-adios-pro-4",
+        "name": "Adidas Adizero Adios Pro 4",
+        "weight": "200g",
+        "material": "Lightstrike Pro",
+        "drop": "6.5mm",
+        "plate": "EnergyRods 2.0",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "asics-metaspeed-sky-tokyo",
+        "name": "ASICS Metaspeed Sky Tokyo",
+        "weight": "185g",
+        "material": "FF Turbo+",
+        "drop": "5mm",
+        "plate": "Full Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "nb-sc-elite-v5",
+        "name": "NB FuelCell SC Elite v5",
+        "weight": "230g",
+        "material": "100% PEBA FuelCell",
+        "drop": "4mm",
+        "plate": "Full Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "hoka-cielo-x1-3",
+        "name": "Hoka Cielo X1 3.0",
+        "weight": "210g",
+        "material": "PEBA Foam",
+        "drop": "7mm",
+        "plate": "Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "on-cloudboom-strike",
+        "name": "On Cloudboom Strike",
+        "weight": "215g",
+        "material": "Helion HF (PEBA)",
+        "drop": "4mm",
+        "plate": "Carbon Speedboard",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "puma-deviate-nitro-elite-4",
+        "name": "PUMA Deviate Nitro Elite 4",
+        "weight": "195g",
+        "material": "Nitro Elite (PEBA)",
+        "drop": "8mm",
+        "plate": "PWRPLATE Carbon",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "saucony-endorphin-elite",
+        "name": "Saucony Endorphin Elite",
+        "weight": "204g",
+        "material": "PWRRUN HG",
+        "drop": "8mm",
+        "plate": "Slotted Carbon",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "brooks-hyperion-elite-5",
+        "name": "Brooks Hyperion Elite 5",
+        "weight": "220g",
+        "material": "DNA Flash v2",
+        "drop": "8mm",
+        "plate": "Carbon Fiber",
+        "category": "Super Shoe"
+    },
+    {
+        "id": "adidas-adizero-evo-sl",
+        "name": "Adidas Adizero EVO SL",
+        "weight": "190g",
+        "material": "Lightstrike Pro",
+        "drop": "7mm",
+        "plate": "None",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "asics-novablast-5",
+        "name": "ASICS Novablast 5",
+        "weight": "250g",
+        "material": "FF BLAST MAX",
+        "drop": "8mm",
+        "plate": "None",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "asics-superblast-2",
+        "name": "ASICS Superblast 2",
+        "weight": "249g",
+        "material": "FF Turbo+ / FF Blast+",
+        "drop": "8mm",
+        "plate": "None",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "hoka-mach-7",
+        "name": "Hoka Mach 7",
+        "weight": "230g",
+        "material": "Supercritical EVA",
+        "drop": "5mm",
+        "plate": "None",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "nb-fuelcell-rebel-v5",
+        "name": "NB FuelCell Rebel v5",
+        "weight": "205g",
+        "material": "PEBA/EVA Blend",
+        "drop": "6mm",
+        "plate": "None",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "puma-deviate-nitro-4",
+        "name": "PUMA Deviate Nitro 4",
+        "weight": "260g",
+        "material": "Nitro Elite",
+        "drop": "8mm",
+        "plate": "PWRPLATE (Composite)",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "saucony-endorphin-speed-5",
+        "name": "Saucony Endorphin Speed 5",
+        "weight": "230g",
+        "material": "PWRRUN PB",
+        "drop": "8mm",
+        "plate": "Nylon Plate",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "mizuno-neo-vista-2",
+        "name": "Mizuno Neo Vista 2",
+        "weight": "260g",
+        "material": "Mizuno Enerzy NXT",
+        "drop": "8mm",
+        "plate": "Glass-Fiber Wave",
+        "category": "Performance Trainer"
+    },
+    {
+        "id": "nike-pegasus-42",
+        "name": "Nike Pegasus 42",
+        "weight": "285g",
+        "material": "ReactX + Zoom Air",
+        "drop": "10mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "asics-gel-nimbus-28",
+        "name": "ASICS Gel-Nimbus 28",
+        "weight": "290g",
+        "material": "FF BLAST+ ECO",
+        "drop": "8mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "hoka-clifton-10",
+        "name": "Hoka Clifton 10",
+        "weight": "240g",
+        "material": "CMEVA",
+        "drop": "5mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "hoka-bondi-9",
+        "name": "Hoka Bondi 9",
+        "weight": "305g",
+        "material": "Max Cushion EVA",
+        "drop": "4mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "nb-fresh-foam-1080-v14",
+        "name": "NB Fresh Foam X 1080 v14",
+        "weight": "265g",
+        "material": "Fresh Foam X",
+        "drop": "6mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "on-cloudmonster-3",
+        "name": "On Cloudmonster 3",
+        "weight": "280g",
+        "material": "Helion / CloudTec",
+        "drop": "6mm",
+        "plate": "Speedboard",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "puma-velocity-nitro-4",
+        "name": "PUMA Velocity Nitro 4",
+        "weight": "265g",
+        "material": "Nitro Foam",
+        "drop": "10mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "saucony-triumph-23",
+        "name": "Saucony Triumph 23",
+        "weight": "280g",
+        "material": "PWRRUN PB",
+        "drop": "10mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "mizuno-wave-rider-29",
+        "name": "Mizuno Wave Rider 29",
+        "weight": "275g",
+        "material": "Enerzy Foam",
+        "drop": "12mm",
+        "plate": "Pebax Wave",
+        "category": "Daily Trainer"
+    },
+    {
+        "id": "brooks-ghost-17",
+        "name": "Brooks Ghost 17",
+        "weight": "283g",
+        "material": "DNA Loft v3",
+        "drop": "12mm",
+        "plate": "None",
+        "category": "Daily Trainer"
+    }
+]
