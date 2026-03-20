@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tactical Run Intel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gpxparser@3.0.8/dist/GPXParser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        :root { 
+            --bf-cyan: #10B981;
+            --bf-bg: #0B0F19;
+        }
+        body { 
+            background-color: var(--bf-bg); 
+            color: #D1D5DB;
+            font-family: 'Rajdhani', sans-serif; 
+            margin: 0; 
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .battlefield-panel { 
+            background: rgba(17, 24, 39, 0.75); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .stat-giant {
+            font-size: 2.5rem; /* Reduced for HUD */
+        }
+        @media (min-width: 768px) {
+            .stat-giant { font-size: 3rem; } /* Reduced for HUD */
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border-bottom: 3px solid transparent; 
+            color: #9CA3AF;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tab-btn.active { 
+            border-bottom-color: var(--bf-cyan); 
+            color: white; 
+        }
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310B981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+    <div class="max-w-[1800px] mx-auto space-y-6">
+        
+        <header class="battlefield-panel p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-2 h-12 bg-emerald-500 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white uppercase">Tactical Run Intel</h1>
+                    <p id="missionDateHeader" class="text-emerald-400 font-semibold text-xs uppercase">Operation: Endurance</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-gray-900/50 p-2 rounded-lg border border-gray-700">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold">Moving Time Only</span>
+                    <input type="checkbox" id="headerAutoPause" class="w-4 h-4 accent-emerald-500">
+                </div>
+                <button id="profileBtn" class="bg-gray-900/50 p-3 rounded-lg"><svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></button>
+                <select id="shoeSelect" class="bg-gray-900/50 border border-gray-700 text-gray-300 text-sm p-3 rounded-lg outline-none w-56"></select>
+                <input type="file" id="runFile" class="hidden" accept=".json,.gpx,.tcx,.fit">
+                <button id="deployBtn" class="bg-emerald-500 text-black font-bold px-5 py-3 rounded-lg">Deploy Data</button>
+            </div>
+        </header>
+
+        <div id="quick-log-carousel" class="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0"></div>
+
+        <div class="flex border-b border-gray-800">
+            <div id="tab-telemetry" class="tab-btn active">Telemetry</div>
+            <div id="tab-trends" class="tab-btn">Trends</div>
+            <div id="tab-history" class="tab-btn">History</div>
+        </div>
+
+        <div id="view-telemetry" class="tab-content">
+            <div class="battlefield-panel p-1 relative">
+                <!-- Map Area -->
+                <div id="map" style="height: 42vh; min-height: 340px; background: #0B0F19;" class="rounded-lg"></div>
+                
+                <!-- Map Overlay Stats -->
+                <div class="absolute top-3 left-3 z-[1000] grid grid-cols-1 gap-3 max-w-xs">
+                    <div class="battlefield-panel p-4 border-l-4 border-l-emerald-500">
+                        <h3 class="text-emerald-400 font-bold uppercase text-xs">Distance</h3>
+                        <div id="stat-dist" class="font-mono stat-giant font-bold text-white">0.00</div>
+                    </div>
+                    <div class="battlefield-panel p-4 border-l-4 border-l-cyan-500">
+                        <h3 class="text-cyan-400 font-bold uppercase text-xs">Avg Pace</h3>
+                        <div id="stat-pace" class="font-mono stat-giant font-bold text-white">--'--"</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="battlefield-panel p-3"><h3 class="text-[10px]">Time</h3><div id="stat-time" class="text-xl font-bold">00:00:00</div></div>
+                        <div class="battlefield-panel p-3"><h3 class="text-[10px]">Avg HR</h3><div id="stat-hr" class="text-xl font-bold text-rose-400">--</div></div>
+                        <div class="battlefield-panel p-3"><h3 class="text-[10px]">Elevation</h3><div id="stat-ele" class="text-xl font-bold text-amber-400">0</div></div>
+                        <div class="battlefield-panel p-3"><h3 class="text-[10px]">Cadence</h3><div id="stat-cad" class="text-xl font-bold text-orange-400">--</div></div>
+                    </div>
+                    <div class="battlefield-panel p-3"><h3 class="text-xs font-bold text-amber-400 uppercase">Gear</h3><div id="shoeIntel"><p class="text-xs">N/A</p></div></div>
+                </div>
+                
+                <!-- Map Overlay Splits & Metrics -->
+                <div class="absolute top-3 right-3 z-[1000] w-64 flex flex-col gap-3">
+                    <div class="battlefield-panel p-3">
+                        <h3 class="text-[10px] font-bold text-rose-500 uppercase tracking-widest mb-2">HR Intensity</h3>
+                        <div id="hrZones" class="font-mono text-xs"></div>
+                    </div>
+                    <div class="battlefield-panel p-3">
+                        <h3 class="text-[10px] font-bold text-cyan-500 uppercase tracking-widest mb-2">Coach Advice</h3>
+                        <div id="aiAdvice" class="text-[10px] text-gray-300"></div>
+                    </div>
+                    <div class="battlefield-panel p-1">
+                        <div class="p-2 text-center border-b border-gray-800"><h3 class="text-xs font-bold uppercase">Tactical Splits</h3></div>
+                        <div id="splitTable" class="max-h-[40vh] overflow-y-auto hide-scrollbar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom: Charts (Stacked / Full Width) -->
+            <div class="grid grid-cols-1 gap-6 mt-6">
+                <div class="battlefield-panel p-8">
+                    <h3 class="text-sm font-bold text-emerald-500 uppercase tracking-[0.3em] mb-4">Workout Analysis (Speed & Elevation)</h3>
+                    <div style="height: 350px;"><canvas id="mainChart"></canvas></div>
+                </div>
+                <div class="battlefield-panel p-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-amber-500 uppercase tracking-[0.3em]">Pacing & Energy Efficiency</h3>
+                        <div class="flex gap-2">
+                            <button id="btn-avg-pace" onclick="updatePaceView('avg')" class="px-3 py-1 text-xs bg-emerald-600 rounded text-white font-bold transition-all border border-gray-600">AVG PACE</button>
+                            <button id="btn-max-pace" onclick="updatePaceView('max')" class="px-3 py-1 text-xs bg-gray-800 hover:bg-rose-600 rounded text-white font-bold transition-all border border-gray-600">MAX PACE</button>
+                        </div>
+                    </div>
+                    <div style="height: 350px;"><canvas id="pacingEngineChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <div id="view-trends" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="battlefield-panel p-6">
+                    <h3 class="text-xs font-bold text-emerald-500 uppercase tracking-[0.3em] mb-4">Weekly Volume</h3>
+                    <div style="height: 250px;"><canvas id="volumeChart"></canvas></div>
+                </div>
+                <div class="battlefield-panel p-6">
+                    <h3 class="text-xs font-bold text-emerald-500 uppercase tracking-[0.3em] mb-4">Pace Efficiency</h3>
+                    <div style="height: 250px;"><canvas id="efficiencyChart"></canvas></div>
+                </div>
+            </div>
+            <div class="battlefield-panel p-6">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-[0.3em] mb-4">Cadence vs Pace</h3>
+                <div style="height: 250px;"><canvas id="scatterChart"></canvas></div>
+            </div>
+            <div id="macroAiAdvice" class="space-y-4 battlefield-panel p-6">
+                <h3 class="text-xs font-bold text-cyan-500 uppercase tracking-[0.3em] mb-4">Campaign Briefing</h3>
+                <p class="text-gray-400">Awaiting more logs for campaign analytics.</p>
+            </div>
+        </div>
+        <div id="view-history" class="tab-content hidden">
+            <div id="history-list" class="space-y-4"></div>
+        </div>
+        
+    </div>
+
+    <script src="tactical-analytics-v2.js" defer></script>
+    <script src="efficiency-engine.js" defer></script>
+    <script src="main.js" defer></script>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="hidden fixed inset-0 z-[2000] bg-black/80 flex items-center justify-center p-4">
+        <div class="battlefield-panel p-6 w-full max-w-sm">
+            <h2 class="text-white font-bold text-xl mb-4 uppercase">Profile Settings</h2>
+            <div class="space-y-4">
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Age</label><input type="number" id="profAge" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Resting HR</label><input type="number" id="profRHR" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Max HR</label><input type="number" id="profMaxHR" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Height (cm)</label><input type="number" id="profHeight" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Weight (kg)</label><input type="number" id="profWeight" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+                <div class="flex justify-between items-center">
+                    <label class="text-xs text-gray-500 uppercase">Moving Time Only</label>
+                    <input type="checkbox" id="profAutoPause">
+                </div>
+                <div><label class="text-xs text-gray-500 uppercase block mb-1">Pause Pace (min/km)</label><input type="number" id="profPausePace" step="0.1" class="w-full bg-gray-800 p-2 text-white rounded"></div>
+            </div>
+            <div class="mt-6 flex gap-4">
+                <button onclick="saveProfile()" class="flex-1 bg-emerald-500 text-black font-bold p-2 rounded">Save</button>
+                <button onclick="toggleProfileModal(false)" class="flex-1 bg-gray-700 text-white p-2 rounded">Close</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

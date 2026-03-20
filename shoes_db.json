@@ -1,0 +1,9 @@
+const RUNNING_GUIDE = {
+    // ... 原有的原則與跑姿資料 ...
+    shoes: [
+        { id: "hoka-clifton-9", name: "Hoka Clifton 9", weight: "248g", material: "CMEVA Foam", drop: "5mm", plate: "None", category: "Daily Trainer" },
+        { id: "nike-vaporfly-3", name: "Nike Vaporfly 3", weight: "185g", material: "ZoomX Foam", drop: "8mm", plate: "Carbon Fiber", category: "Super Shoe" },
+        { id: "asics-novablast-4", name: "ASICS Novablast 4", weight: "260g", material: "FF BLAST+ ECO", drop: "8mm", plate: "None", category: "Daily Trainer" },
+        { id: "adidas-adios-pro-3", name: "Adidas Adios Pro 3", weight: "215g", material: "Lightstrike Pro", drop: "6.5mm", plate: "EnergyRods 2.0", category: "Super Shoe" }
+    ]
+};
